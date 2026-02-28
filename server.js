@@ -13,7 +13,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://atkt-mgt.netlify.app"
+  "https://smart-atkt.netlify.app/"
 ];
 
 app.use(cors({
