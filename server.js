@@ -9,32 +9,19 @@ const signatureRoutes = require("./routes/signatureRoutes");
 
 const app = express();
 
-/* ================= CORS CONFIG (FINAL FIX) ================= */
+/* ================= SIMPLE & WORKING CORS ================= */
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://smart-atkt.netlify.app"
-];
-
+// 🔥 Allow your frontend domains here
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (mobile apps, postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(null, false); // don't throw error, just block
-    }
-  },
-  credentials: true,
-}));
-
-// VERY IMPORTANT → Handle preflight requests properly
-app.options("*", cors({
-  origin: allowedOrigins,
+  origin: [
+    "http://localhost:5173",
+    "https://smart-atkt.netlify.app"
+  ],
   credentials: true
 }));
+
+// 🔥 Handle preflight requests (DELETE, Authorization, etc.)
+app.options("*", cors());
 
 /* ================= BODY PARSERS ================= */
 
@@ -43,9 +30,9 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 /* ================= ROUTES ================= */
 
-app.use("/api", uploadRoutes);              // upload-students, upload-progress
-app.use("/api", deleteRoutes);              // delete-students
-app.use("/api/auth", authRoutes);           // send-otp, reset-password
+app.use("/api", uploadRoutes);               // upload-students, upload-progress
+app.use("/api", deleteRoutes);               // delete-students
+app.use("/api/auth", authRoutes);            // send-otp, reset-password
 app.use("/api/signatures", signatureRoutes.router); // upload signature
 
 /* ================= HEALTH CHECK ================= */
