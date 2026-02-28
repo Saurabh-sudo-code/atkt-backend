@@ -30,8 +30,8 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// FIXED: Using regex that Node 22/Express 5 understands
-app.options('(.*)', cors()); 
+// ❌ REMOVE THIS (causes crash in Express 5)
+// app.options('(.*)', cors()); 
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
