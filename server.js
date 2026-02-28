@@ -8,48 +8,40 @@ const signatureRoutes = require("./routes/signatureRoutes");
 
 const app = express();
 
-/* ================= FORCE CORS FOR ALL REQUESTS ================= */
+/* ===== VERY SIMPLE GLOBAL CORS ===== */
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-
+  res.setHeader("Access-Control-Allow-Origin", "https://smart-atkt.netlify.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+    return res.status(200).end();
   }
 
   next();
 });
 
-/* ================= BODY ================= */
-
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ================= ROUTES ================= */
+/* ===== ROUTES ===== */
 
 app.use("/api", uploadRoutes);
 app.use("/api", deleteRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/signatures", signatureRoutes.router);
 
-/* ================= HEALTH ================= */
-
 app.get("/health", (req, res) => {
-  res.send("Server is Healthy 🚀");
+  res.send("OK");
 });
-
-/* ================= 404 ================= */
 
 app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
+  res.status(404).send("Not Found");
 });
-
-/* ================= START ================= */
 
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on port " + PORT);
 });
