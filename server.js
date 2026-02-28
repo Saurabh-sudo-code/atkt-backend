@@ -12,7 +12,7 @@ const app = express();
 // 🔥 CHANGE 1: Secure CORS for Production
 const allowedOrigins = [
   "http://localhost:5173", // Local testing
-  "https://atkt-frontend.vercel.app" // 👈 REPLACE with your actual Vercel link later
+  "https://atkt-mgt.netlify.app/" // 👈 REPLACE with your actual Vercel link later
 ];
 
 app.use(cors({
