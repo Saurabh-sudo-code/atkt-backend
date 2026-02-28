@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "description": "ATKT Management Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -16,7 +17,7 @@
     "firebase-admin": "^13.6.1",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
-    "uuid": "^13.0.0",
+    "uuid": "^8.3.2",
     "xlsx": "^0.18.5"
   }
 }
