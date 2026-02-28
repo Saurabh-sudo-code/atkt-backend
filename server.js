@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 
 const uploadRoutes = require("./routes/uploadRoutes");
 const deleteRoutes = require("./routes/deleteRoutes");
@@ -9,19 +8,30 @@ const signatureRoutes = require("./routes/signatureRoutes");
 
 const app = express();
 
-/* ================= SIMPLE & WORKING CORS ================= */
+/* ================= MANUAL CORS (BULLETPROOF) ================= */
 
-// 🔥 Allow your frontend domains here
-app.use(cors({
-  origin: [
+app.use((req, res, next) => {
+  const allowedOrigins = [
     "http://localhost:5173",
     "https://smart-atkt.netlify.app"
-  ],
-  credentials: true
-}));
+  ];
 
-// 🔥 Handle preflight requests (DELETE, Authorization, etc.)
-app.options("*", cors());
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 
 /* ================= BODY PARSERS ================= */
 
@@ -30,24 +40,24 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 /* ================= ROUTES ================= */
 
-app.use("/api", uploadRoutes);               // upload-students, upload-progress
-app.use("/api", deleteRoutes);               // delete-students
-app.use("/api/auth", authRoutes);            // send-otp, reset-password
-app.use("/api/signatures", signatureRoutes.router); // upload signature
+app.use("/api", uploadRoutes);
+app.use("/api", deleteRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/signatures", signatureRoutes.router);
 
-/* ================= HEALTH CHECK ================= */
+/* ================= HEALTH ================= */
 
 app.get("/health", (req, res) => {
   res.status(200).send("Server is Healthy! 🚀");
 });
 
-/* ================= GLOBAL 404 ================= */
+/* ================= 404 ================= */
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-/* ================= START SERVER ================= */
+/* ================= START ================= */
 
 const PORT = process.env.PORT || 10000;
 
