@@ -8,23 +8,12 @@ const signatureRoutes = require("./routes/signatureRoutes");
 
 const app = express();
 
-/* ================= MANUAL CORS (BULLETPROOF) ================= */
+/* ================= FORCE CORS FOR ALL REQUESTS ================= */
 
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "https://smart-atkt.netlify.app"
-  ];
-
-  const origin = req.headers.origin;
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
@@ -33,10 +22,10 @@ app.use((req, res, next) => {
   next();
 });
 
-/* ================= BODY PARSERS ================= */
+/* ================= BODY ================= */
 
 app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
 
 /* ================= ROUTES ================= */
 
@@ -48,7 +37,7 @@ app.use("/api/signatures", signatureRoutes.router);
 /* ================= HEALTH ================= */
 
 app.get("/health", (req, res) => {
-  res.status(200).send("Server is Healthy! 🚀");
+  res.send("Server is Healthy 🚀");
 });
 
 /* ================= 404 ================= */
@@ -61,6 +50,6 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 10000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🔥 Server started on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
