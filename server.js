@@ -11,7 +11,7 @@ const app = express();
 /* ===== VERY SIMPLE GLOBAL CORS ===== */
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://smart-atkt.netlify.app");
+  res.setHeader("Access-Control-Allow-Origin", "https://smart-atkt-mgt.netlify.app");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   
